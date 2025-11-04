@@ -26,5 +26,5 @@ jobs:
         run: |
           IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/myapp:${{ github.ref_name }}
           echo "Building image: $IMAGE_NAME"
-          docker build -t $IMAGE_NAME .
+          docker build -t $IMAGE_NAME ./MYAPP
           docker push $IMAGE_NAME
