@@ -28,8 +28,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
-            context: ./MYAPP
+            context: ./workflow
             push: true
             tags: ${{ env.IMAGE_NAME }}
-            
+
             # tags: ghcr.io/${{ github.repository_owner }}/myapp:${{ github.ref_name }}
