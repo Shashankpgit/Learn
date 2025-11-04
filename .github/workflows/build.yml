@@ -23,8 +23,8 @@ jobs:
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Build and push Docker image
-        run: |
-          IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/myapp:${{ github.ref_name }}
-          echo "Building image: $IMAGE_NAME"
-          docker build -t $IMAGE_NAME ./MYAPP
-          docker push $IMAGE_NAME
+        uses: docker/build-push-action@v4
+        with:
+            context: ./MYAPP
+            push: true
+            tags: ghcr.io/${{ github.repository_owner }}/myapp:${{ github.ref_name }}
