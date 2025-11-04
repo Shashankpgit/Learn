@@ -22,9 +22,14 @@ jobs:
       - name: Log in to GitHub Container Registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
+      - name: Set image name
+        run: echo "IMAGE_NAME=ghcr.io/$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')/myapp:${{ github.ref_name }}" >> $GITHUB_ENV
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
             context: ./MYAPP
             push: true
-            tags: ghcr.io/${{ github.repository_owner }}/myapp:${{ github.ref_name }}
+            tags: ${{ env.IMAGE_NAME }}
+            
+            # tags: ghcr.io/${{ github.repository_owner }}/myapp:${{ github.ref_name }}
