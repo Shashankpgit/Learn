@@ -1,0 +1,10 @@
+name: finternet-services-helmchart
+namespace: argocd
+repoURL: git@github.com:finternet-io/helmcharts.git
+targetRevision: v*
+directories:
+  path: charts/*
+  #if any of the charts need to be excluded, list them here
+  exclude: ["charts/hdx-oss-v2", "charts/yugabyte", "charts/apps"]
+
+syncWave: "0"   # optional if you want ordered deployment
