@@ -1,0 +1,46 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  generators:
+    - git:
+        repoURL: {{ .Values.repoURL }}
+        revision: {{ .Values.targetRevision }}         
+        directories:
+          - path: {{ .Values.directories.path }}
+          {{- if .Values.directories.exclude }}
+          {{- range .Values.directories.exclude }}
+          - path: {{ . }}
+            exclude: true
+          {{- end }}
+          {{- end }}
+  template:
+    metadata:
+      name: '{{`{{path.basename}}`}}-app'
+      namespace: argocd
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+      {{- if .Values.syncWave }}
+      annotations:
+        argocd.argoproj.io/sync-wave: "{{ .Values.syncWave }}"
+      {{- end }}
+    spec:
+      project: default
+      source:
+        repoURL: {{ .Values.repoURL }}
+        targetRevision: {{ .Values.targetRevision }}     
+        path: '{{`{{path}}`}}'
+        helm:
+          valueFiles:
+            - values.yaml
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{`{{path.basename}}`}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

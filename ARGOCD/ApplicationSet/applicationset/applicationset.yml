@@ -11,7 +11,11 @@ spec:
         revision: v*
         directories:
           - path: charts/*
-          - path: charts/*
+          - path: charts/hdx-oss-v2
+            exclude: true
+          - path: charts/yugabyte
+            exclude: true
+          - path: charts/apps
             exclude: true
   template:
     metadata:
