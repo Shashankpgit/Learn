@@ -1,0 +1,37 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: finternet-services
+  namespace: argocd
+spec:
+  generators:
+    - git:
+        repoURL: git@github.com:finternet-io/helmcharts.git
+        # targetRevision: v*
+        revision: v*
+        directories:
+          - path: charts/*
+          - path: charts/*
+            exclude: true
+  template:
+    metadata:
+      name: '{{path.basename}}-app'
+      namespace: argocd
+    spec:
+      project: default
+      source:
+        repoURL: git@github.com:finternet-io/helmcharts.git
+        targetRevision: v*
+        path: '{{path}}'
+        helm:
+          valueFiles:
+            - values.yaml
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{path.basename}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
