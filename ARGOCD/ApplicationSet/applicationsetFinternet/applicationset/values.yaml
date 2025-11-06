@@ -1,10 +1,7 @@
 name: finternet-services-helmchart
 namespace: argocd
-repoURL: git@github.com:finternet-io/helmcharts.git
-targetRevision: v*
 
-# Applications list for list generator. Each entry becomes an ArgoCD Application.
-# Use syncWave (integer as string) to order deployment. Lower waves deploy first.
+# List of applications to deploy
 applications:
   - name: ingress
     repoURL: git@github.com:finternet-io/helmcharts.git
@@ -19,6 +16,7 @@ applications:
     path: charts/cert-manager
     destNamespace: cert-manager
     syncWave: "1"
+    dependsOn: ["ingress"]
 
   - name: letsencrypt
     repoURL: git@github.com:finternet-io/helmcharts.git
@@ -26,6 +24,17 @@ applications:
     path: charts/letsencrypt
     destNamespace: letsencrypt
     syncWave: "2"
+    dependsOn: ["cert-manager"]
 
-# Legacy optional single syncWave (ignored when using per-application syncWave)
-syncWave: "0"
+  - name: hdx-oss-v2
+    repoURL: git@github.com:finternet-io/helmcharts.git
+    targetRevision: v*
+    path: charts/hdx-oss-v2
+    destNamespace: hdx
+    syncWave: "3"
+
+# Exclude list — any app whose `path` starts with these will be skipped
+exclude:
+  - "charts/hdx-oss-v2"
+  - "charts/yugabyte"
+  - "charts/apps"
