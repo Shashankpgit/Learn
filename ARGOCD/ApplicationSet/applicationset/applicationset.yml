@@ -3,24 +3,27 @@ kind: ApplicationSet
 metadata:
   name: finternet-services
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   generators:
     - git:
         repoURL: git@github.com:finternet-io/helmcharts.git
-        # targetRevision: v*
         revision: v*
         directories:
           - path: charts/*
-          - path: charts/hdx-oss-v2
-            exclude: true
-          - path: charts/yugabyte
-            exclude: true
-          - path: charts/apps
-            exclude: true
   template:
     metadata:
       name: '{{path.basename}}-app'
       namespace: argocd
+      annotations:
+        argocd.argoproj.io/depends-on: >-
+          {{- if eq (path.basename) "cert-manager" -}} ingress-app
+          {{- else if eq (path.basename) "letsencrypt-issuer" -}} cert-manager-app
+          {{- else if eq (path.basename) "keycloak" -}} letsencrypt-issuer-app
+          {{- else if or (eq (path.basename) "yugabyte") (eq (path.basename) "hdx-oss-v2") -}} ''
+          {{- else -}} keycloak-app
+          {{- end -}}
     spec:
       project: default
       source:

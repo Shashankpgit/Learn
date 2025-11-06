@@ -5,39 +5,29 @@ metadata:
   namespace: {{ .Values.namespace }}
 spec:
   generators:
-    - git:
-        repoURL: {{ .Values.repoURL }}
-        revision: {{ .Values.targetRevision }}         
-        directories:
-          - path: {{ .Values.directories.path }}
-          {{- if .Values.directories.exclude }}
-          {{- range .Values.directories.exclude }}
-          - path: {{ . }}
-            exclude: true
-          {{- end }}
-          {{- end }}
+    - list:
+        elements: |
+{{ toYaml (default (list) .Values.applications) | indent 10 }}
   template:
     metadata:
-      name: '{{`{{path.basename}}`}}-app'
+      name: '{{`{{name}}`}}-app'
       namespace: argocd
       finalizers:
         - resources-finalizer.argocd.argoproj.io
-      {{- if .Values.syncWave }}
       annotations:
-        argocd.argoproj.io/sync-wave: "{{ .Values.syncWave }}"
-      {{- end }}
+        argocd.argoproj.io/sync-wave: "{{`{{syncWave}}`}}"
     spec:
       project: default
       source:
-        repoURL: {{ .Values.repoURL }}
-        targetRevision: {{ .Values.targetRevision }}     
+        repoURL: '{{`{{repoURL}}`}}'
+        targetRevision: '{{`{{targetRevision}}`}}'
         path: '{{`{{path}}`}}'
         helm:
           valueFiles:
             - values.yaml
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{`{{path.basename}}`}}'
+        namespace: '{{`{{destNamespace}}`}}'
       syncPolicy:
         automated:
           prune: true
