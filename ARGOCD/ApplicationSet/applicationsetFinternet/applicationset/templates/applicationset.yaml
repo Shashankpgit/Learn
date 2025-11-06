@@ -6,8 +6,26 @@ metadata:
 spec:
   generators:
     - list:
-        elements: |
-{{ toYaml (default (list) .Values.applications) | indent 10 }}
+        elements:
+{{- $apps := (default (list) .Values.applications) -}}
+{{- $excludes := .Values.exclude | default (list) -}}
+{{- range $app := $apps }}
+{{- $isExcluded := include "isExcluded" (list $app.path $excludes) | trim -}}
+{{- if ne $isExcluded "true" }}
+          - name: {{ $app.name }}
+            repoURL: {{ $app.repoURL }}
+            targetRevision: {{ $app.targetRevision }}
+            path: {{ $app.path }}
+            destNamespace: {{ $app.destNamespace }}
+            syncWave: "{{ $app.syncWave }}"
+            {{- if $app.dependsOn }}
+            dependsOn:
+            {{- range $dep := $app.dependsOn }}
+              - {{ $dep }}
+            {{- end }}
+            {{- end }}
+{{- end }}
+{{- end }}
   template:
     metadata:
       name: '{{`{{name}}`}}-app'
@@ -34,3 +52,9 @@ spec:
           selfHeal: true
         syncOptions:
           - CreateNamespace=true
+      {{- if `{{dependsOn}}` }}
+      dependsOn:
+{{ `{{- range dependsOn }}` | indent 8 }}
+        - '{{`{{ . }}`}}-app'
+{{ `{{- end }}` | indent 8 }}
+      {{- end }}
