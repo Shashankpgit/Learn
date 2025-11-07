@@ -34,10 +34,6 @@ spec:
 {{- if .Values.globalOverrideFile }}
             - {{ .Values.globalOverrideFile }}
 {{- end }}
-          values: |
-{{- range .Values.globalOverrides }}
-            {{ . | nindent 12 }}
-{{- end }}
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{`{{namespace}}`}}'

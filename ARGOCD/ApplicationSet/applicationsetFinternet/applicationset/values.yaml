@@ -2,18 +2,20 @@ name: finternet-services-helmchart
 namespace: argocd
 repoURL: git@github.com:finternet-io/helmcharts.git
 targetRevision: main
-globalOverrideFile: ../global-values/gloabl-values.yml
+globalOverrideFile: charts/global-values.yml
 
 charts:
   - name: ingress
     namespace: ingress
-    path: helmcharts/charts/ingress
+    path: charts/ingress
     syncWave: "0"
+
   - name: cert-manager
     namespace: cert-manager
-    path: helmcharts/charts/cert-manager
+    path: charts/cert-manager
     syncWave: "1"
+
   - name: keycloak
     namespace: keycloak
-    path: helmcharts/charts/keycloak
+    path: charts/keycloak
     syncWave: "2"
