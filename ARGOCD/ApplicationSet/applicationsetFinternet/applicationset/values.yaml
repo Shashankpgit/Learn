@@ -1,40 +1,35 @@
 name: finternet-services-helmchart
 namespace: argocd
+repoURL: git@github.com:finternet-io/helmcharts.git
+targetRevision: v*
+includeHelmValues: true
 
-# List of applications to deploy
-applications:
+charts:
   - name: ingress
-    repoURL: git@github.com:finternet-io/helmcharts.git
-    targetRevision: v*
     path: charts/ingress
-    destNamespace: ingress
+    namespace: ingress
     syncWave: "0"
+    helm:
+      values: ""
 
   - name: cert-manager
-    repoURL: git@github.com:finternet-io/helmcharts.git
-    targetRevision: v*
     path: charts/cert-manager
-    destNamespace: cert-manager
+    namespace: cert-manager
     syncWave: "1"
-    dependsOn: ["ingress"]
+    helm:
+      values: ""
 
-  - name: letsencrypt
-    repoURL: git@github.com:finternet-io/helmcharts.git
-    targetRevision: v*
-    path: charts/letsencrypt
-    destNamespace: letsencrypt
+  - name: letsencrypt-issuer
+    path: charts/letsencrypt-issuer
+    namespace: cert-manager
     syncWave: "2"
-    dependsOn: ["cert-manager"]
-
-  - name: hdx-oss-v2
-    repoURL: git@github.com:finternet-io/helmcharts.git
-    targetRevision: v*
-    path: charts/hdx-oss-v2
-    destNamespace: hdx
+    helm:
+      values: ""
+      
+  - name: keycloak
+    path: charts/keycloak
+    namespace: keycloak
     syncWave: "3"
-
-# Exclude list — any app whose `path` starts with these will be skipped
-exclude:
-  - "charts/hdx-oss-v2"
-  - "charts/yugabyte"
-  - "charts/apps"
+    helm:
+      values: |
+        replicas: 2
