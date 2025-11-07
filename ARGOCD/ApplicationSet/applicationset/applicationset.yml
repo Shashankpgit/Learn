@@ -9,21 +9,25 @@ spec:
   generators:
     - git:
         repoURL: git@github.com:finternet-io/helmcharts.git
+        # targetRevision: v*
         revision: v*
         directories:
           - path: charts/*
+          - path: charts/hdx-oss-v2
+            exclude: true
+          - path: charts/yugabyte
+            exclude: true
+          - path: charts/apps
+            exclude: true
   template:
     metadata:
       name: '{{path.basename}}-app'
       namespace: argocd
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
       annotations:
-        argocd.argoproj.io/depends-on: >-
-          {{- if eq (path.basename) "cert-manager" -}} ingress-app
-          {{- else if eq (path.basename) "letsencrypt-issuer" -}} cert-manager-app
-          {{- else if eq (path.basename) "keycloak" -}} letsencrypt-issuer-app
-          {{- else if or (eq (path.basename) "yugabyte") (eq (path.basename) "hdx-oss-v2") -}} ''
-          {{- else -}} keycloak-app
-          {{- end -}}
+        argocd.argoproj.io/sync-wave: if(eq('{{path.basename}}', 'ingress'), "0", if(eq('{{path.basename}}', 'cert-manager'), "1", "2"))
+        argocd.argoproj.io/depends-on: ingress-app
     spec:
       project: default
       source:

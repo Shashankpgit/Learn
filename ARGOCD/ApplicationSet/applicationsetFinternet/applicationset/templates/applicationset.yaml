@@ -7,54 +7,31 @@ spec:
   generators:
     - list:
         elements:
-{{- $apps := (default (list) .Values.applications) -}}
-{{- $excludes := .Values.exclude | default (list) -}}
-{{- range $app := $apps }}
-{{- $isExcluded := include "isExcluded" (list $app.path $excludes) | trim -}}
-{{- if ne $isExcluded "true" }}
-          - name: {{ $app.name }}
-            repoURL: {{ $app.repoURL }}
-            targetRevision: {{ $app.targetRevision }}
-            path: {{ $app.path }}
-            destNamespace: {{ $app.destNamespace }}
-            syncWave: "{{ $app.syncWave }}"
-            {{- if $app.dependsOn }}
-            dependsOn:
-            {{- range $dep := $app.dependsOn }}
-              - {{ $dep }}
-            {{- end }}
-            {{- end }}
-{{- end }}
-{{- end }}
+{{ toYaml .Values.charts | indent 10 }}
   template:
     metadata:
-      name: '{{`{{name}}`}}-app'
+      name: '{{`{{name}}`}}'
       namespace: argocd
       finalizers:
         - resources-finalizer.argocd.argoproj.io
       annotations:
-        argocd.argoproj.io/sync-wave: "{{`{{syncWave}}`}}"
+        argocd.argoproj.io/sync-wave: '{{`{{syncWave}}`}}'
     spec:
       project: default
       source:
-        repoURL: '{{`{{repoURL}}`}}'
-        targetRevision: '{{`{{targetRevision}}`}}'
+        repoURL: {{ .Values.repoURL }}
+        targetRevision: {{ .Values.targetRevision }}
         path: '{{`{{path}}`}}'
         helm:
-          valueFiles:
-            - values.yaml
+{{- if .Values.includeHelmValues }}
+          values: '{{`{{helm.values}}`}}'
+{{- end }}
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{`{{destNamespace}}`}}'
+        namespace: '{{`{{namespace}}`}}'
       syncPolicy:
         automated:
           prune: true
           selfHeal: true
         syncOptions:
           - CreateNamespace=true
-      {{- if `{{dependsOn}}` }}
-      dependsOn:
-{{ `{{- range dependsOn }}` | indent 8 }}
-        - '{{`{{ . }}`}}-app'
-{{ `{{- end }}` | indent 8 }}
-      {{- end }}
