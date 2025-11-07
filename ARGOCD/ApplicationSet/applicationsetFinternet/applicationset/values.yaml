@@ -2,7 +2,6 @@ name: finternet-services-helmchart
 namespace: argocd
 repoURL: git@github.com:finternet-io/helmcharts.git
 targetRevision: v*
-includeHelmValues: true
 
 charts:
   - name: ingress
@@ -10,23 +9,30 @@ charts:
     namespace: ingress
     syncWave: "0"
     helm:
-      values: ""
+      values: |
+        controller:
+          replicaCount: 1
+
   - name: cert-manager
     path: charts/cert-manager
     namespace: cert-manager
     syncWave: "1"
     helm:
-      values: ""
+      values: |
+        installCRDs: true
+
   - name: letsencrypt-issuer
     path: charts/letsencrypt-issuer
     namespace: cert-manager
     syncWave: "2"
     helm:
-      values: ""
+      values: |
+        email: dummysender111@gmail.com
+
   - name: keycloak
     path: charts/keycloak
     namespace: keycloak
     syncWave: "3"
     helm:
       values: |
-        replicas: 2
+        replicaCount: 1
