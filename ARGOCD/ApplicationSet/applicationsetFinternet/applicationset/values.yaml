@@ -1,7 +1,7 @@
 name: finternet-services-helmchart
 namespace: argocd
 repoURL: git@github.com:finternet-io/helmcharts.git
-targetRevision: main
+targetRevision: helmcharts
 globalOverrideFile: charts/global-values.yml
 
 charts:
