@@ -11,7 +11,7 @@ spec:
     # repoURL: git@github.com:finternet-io/units-automation.git
     repoURL: https://github.com/Shashankpgit/Learn.git
     # targetRevision: terraform-vm-setup
-    targetRevision: github-Actions
+    targetRevision: argocd
     # path: manifests/applicationset/applicationset
     path: ARGOCD/ApplicationSet/applicationsetFinternet/applicationset
     # directories:

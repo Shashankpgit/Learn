@@ -11,21 +11,18 @@ charts:
     syncWave: "0"
     helm:
       values: ""
-
   - name: cert-manager
     path: charts/cert-manager
     namespace: cert-manager
     syncWave: "1"
     helm:
       values: ""
-
   - name: letsencrypt-issuer
     path: charts/letsencrypt-issuer
     namespace: cert-manager
     syncWave: "2"
     helm:
       values: ""
-      
   - name: keycloak
     path: charts/keycloak
     namespace: keycloak
