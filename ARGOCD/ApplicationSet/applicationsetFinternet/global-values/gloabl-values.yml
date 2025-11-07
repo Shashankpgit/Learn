@@ -1,0 +1,21 @@
+# global-overrides.yaml
+# ingress:
+#   controller:
+#     replicaCount: 2
+#     service:
+#       type: LoadBalancer
+
+# cert-manager:
+#   installCRDs: true
+#   resources:
+#     requests:
+#       cpu: 200m
+#       memory: 256Mi
+
+keycloak:
+  replicaCount: 3
+  service:
+    type: ClusterIP
+  ingress:
+    enabled: true
+    host: keycloak.finternet.dev
