@@ -36,7 +36,10 @@ spec:
         path: '{{`{{path}}`}}'
 {{- if .Values.includeHelmValues }}
         helm:
-          values: '{{`{{helm.values}}`}}'
+{{`{{- if helm.values }}`}}
+          values: |
+{{`{{ helm.values | indent 12 }}`}}
+{{`{{- end }}`}}
 {{- end }}
       destination:
         server: https://kubernetes.default.svc
