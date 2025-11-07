@@ -28,7 +28,7 @@ spec:
         - resources-finalizer.argocd.argoproj.io
       annotations:
         # Safe quoting for syncWave value
-        argocd.argoproj.io/sync-wave: '{{syncWave}}'
+        argocd.argoproj.io/sync-wave: '{{.syncWave}}'
     spec:
       project: default
       source:
