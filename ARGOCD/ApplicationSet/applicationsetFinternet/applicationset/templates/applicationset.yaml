@@ -22,26 +22,26 @@ spec:
 {{- end }}
   template:
     metadata:
-      name: '{{`{{name}}`}}'
+      name: '{{name}}-app'
       namespace: argocd
       finalizers:
         - resources-finalizer.argocd.argoproj.io
       annotations:
         # Safe quoting for syncWave value
-        argocd.argoproj.io/sync-wave: '{{`{{syncWave}}`}}'
+        argocd.argoproj.io/sync-wave: '{{syncWave}}'
     spec:
       project: default
       source:
         repoURL: {{ .Values.repoURL | quote }}
         targetRevision: {{ .Values.targetRevision | quote }}
-        path: '{{`{{path}}`}}'
+        path: '{{path}}'
         helm:
 {{- if .Values.includeHelmValues }}
-          values: '{{`{{helm.values}}`}}'
+          values: '{{helm.values}}'
 {{- end }}
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{`{{namespace}}`}}'
+        namespace: '{{namespace}}'
       syncPolicy:
         automated:
           prune: true
