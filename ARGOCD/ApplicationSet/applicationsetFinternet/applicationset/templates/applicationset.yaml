@@ -7,15 +7,21 @@ spec:
   generators:
     - list:
         elements:
-          {{- toYaml .Values.charts | nindent 10 }}
+{{- range .Values.charts }}
+          - name: {{ .name }}
+            namespace: {{ .namespace }}
+            path: {{ .path }}
+            syncWave: "{{ .syncWave }}"
+{{- end }}
+
   template:
     metadata:
       name: '{{`{{name}}`}}'
       namespace: argocd
-      finalizers:
-        - resources-finalizer.argocd.argoproj.io
       annotations:
         argocd.argoproj.io/sync-wave: '{{`{{syncWave}}`}}'
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
     spec:
       project: default
       source:
@@ -23,7 +29,15 @@ spec:
         targetRevision: {{ .Values.targetRevision }}
         path: '{{`{{path}}`}}'
         helm:
-          values: '{{`{{helm.values}}`}}'
+          valueFiles:
+            - values.yaml
+{{- if .Values.globalOverrideFile }}
+            - {{ .Values.globalOverrideFile }}
+{{- end }}
+          values: |
+{{- range .Values.globalOverrides }}
+            {{ . | nindent 12 }}
+{{- end }}
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{`{{namespace}}`}}'
