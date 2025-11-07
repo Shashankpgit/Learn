@@ -7,7 +7,19 @@ spec:
   generators:
     - list:
         elements:
-{{ toYaml .Values.charts | indent 10 }}
+{{- range .Values.charts }}
+          - name: {{ .name | quote }}
+            namespace: {{ .namespace | quote }}
+            path: {{ .path | quote }}
+            syncWave: {{ .syncWave | quote }}
+            helm:
+              values: |-
+{{- if .helm.values }}
+{{ .helm.values | indent 16 }}
+{{- else }}
+                ""
+{{- end }}
+{{- end }}
   template:
     metadata:
       name: '{{`{{name}}`}}'
@@ -15,12 +27,13 @@ spec:
       finalizers:
         - resources-finalizer.argocd.argoproj.io
       annotations:
+        # Safe quoting for syncWave value
         argocd.argoproj.io/sync-wave: '{{`{{syncWave}}`}}'
     spec:
       project: default
       source:
-        repoURL: {{ .Values.repoURL }}
-        targetRevision: {{ .Values.targetRevision }}
+        repoURL: {{ .Values.repoURL | quote }}
+        targetRevision: {{ .Values.targetRevision | quote }}
         path: '{{`{{path}}`}}'
         helm:
 {{- if .Values.includeHelmValues }}
