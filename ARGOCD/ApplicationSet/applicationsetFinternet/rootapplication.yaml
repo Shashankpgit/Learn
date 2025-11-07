@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     # repoURL: git@github.com:finternet-io/units-automation.git
-    repoURL: git@github.com:Shashankpgit/Learn.git
+    repoURL: https://github.com/Shashankpgit/Learn.git
     # targetRevision: terraform-vm-setup
     targetRevision: github-Actions
     # path: manifests/applicationset/applicationset
