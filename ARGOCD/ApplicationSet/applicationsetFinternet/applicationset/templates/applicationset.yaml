@@ -7,34 +7,23 @@ spec:
   generators:
     - list:
         elements:
-{{- range $chart := .Values.charts }}
-          - name: {{ $chart.name | quote }}
-            namespace: {{ $chart.namespace | quote }}
-            path: {{ $chart.path | quote }}
-            syncWave: {{ $chart.syncWave | quote }}
-            helm:
-              values: |
-{{- if $chart.helm.values }}
-{{ $chart.helm.values | nindent 16 }}
-{{- else }}
-                # No values provided
-{{- end }}
-{{- end }}
+          {{- toYaml .Values.charts | nindent 10 }}
   template:
     metadata:
-      name: '{{`{{name}}`}}-app'
+      name: '{{`{{name}}`}}'
       namespace: argocd
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
       annotations:
         argocd.argoproj.io/sync-wave: '{{`{{syncWave}}`}}'
     spec:
       project: default
       source:
-        repoURL: {{ .Values.repoURL | quote }}
-        targetRevision: {{ .Values.targetRevision | quote }}
+        repoURL: {{ .Values.repoURL }}
+        targetRevision: {{ .Values.targetRevision }}
         path: '{{`{{path}}`}}'
         helm:
-          values: |
-            {{`{{helm.values}}`}}
+          values: '{{`{{helm.values}}`}}'
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{`{{namespace}}`}}'
