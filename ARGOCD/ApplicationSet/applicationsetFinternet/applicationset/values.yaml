@@ -2,7 +2,7 @@ name: finternet-services-helmchart
 namespace: argocd
 repoURL: git@github.com:finternet-io/helmcharts.git
 targetRevision: helmcharts
-globalOverrideFile: charts/global-values.yml
+globalOverrideFile: ../global-values.yml
 
 charts:
   - name: ingress
