@@ -13,11 +13,11 @@ spec:
             path: {{ $chart.path | quote }}
             syncWave: {{ $chart.syncWave | quote }}
             helm:
-              values: |-
+              values: |
 {{- if $chart.helm.values }}
-{{ $chart.helm.values | indent 16 }}
+{{ $chart.helm.values | nindent 16 }}
 {{- else }}
-{{ "                # No values provided" }}
+                # No values provided
 {{- end }}
 {{- end }}
   template:
