@@ -7,41 +7,40 @@ spec:
   generators:
     - list:
         elements:
-{{- range .Values.charts }}
-          - name: {{ .name | quote }}
-            namespace: {{ .namespace | quote }}
-            path: {{ .path | quote }}
-            syncWave: {{ .syncWave | quote }}
+{{- range $chart := .Values.charts }}
+          - name: {{ $chart.name | quote }}
+            namespace: {{ $chart.namespace | quote }}
+            path: {{ $chart.path | quote }}
+            syncWave: {{ $chart.syncWave | quote }}
             helm:
               values: |-
-{{- if .helm.values }}
-{{ .helm.values | indent 16 }}
+{{- if $chart.helm.values }}
+{{ $chart.helm.values | indent 16 }}
 {{- else }}
                 ""
 {{- end }}
 {{- end }}
   template:
     metadata:
-      name: '{{.name}}-app'
+      name: '{{`{{name}}`}}-app'
       namespace: argocd
       finalizers:
         - resources-finalizer.argocd.argoproj.io
       annotations:
-        # Safe quoting for syncWave value
-        argocd.argoproj.io/sync-wave: '{{.syncWave}}'
+        argocd.argoproj.io/sync-wave: '{{`{{syncWave}}`}}'
     spec:
       project: default
       source:
         repoURL: {{ .Values.repoURL | quote }}
         targetRevision: {{ .Values.targetRevision | quote }}
-        path: '{{.path}}'
-        helm:
+        path: '{{`{{path}}`}}'
 {{- if .Values.includeHelmValues }}
-          values: '{{.helm.values}}'
+        helm:
+          values: '{{`{{helm.values}}`}}'
 {{- end }}
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{.namespace}}'
+        namespace: '{{`{{namespace}}`}}'
       syncPolicy:
         automated:
           prune: true
