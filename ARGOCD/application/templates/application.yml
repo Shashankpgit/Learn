@@ -1,0 +1,31 @@
+{{- range .Values.applications }}
+{{- if or (not (hasKey . "enabled")) .enabled }}
+{{- $config := $.Values.config -}}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ printf "finternet.%s" .name | quote }}
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  destination:
+    namespace: {{ .namespace | default .name | quote }}
+    server: {{ $config.spec.destination.server | quote }}
+  source:
+    repoURL: {{ $config.spec.source.repoURL }}
+    targetRevision: {{ $config.spec.source.targetRevision }}
+    path: {{ .path | quote }}
+    {{- with .tool }}
+    {{- . | toYaml | nindent 4 }}
+    {{- end }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+{{- end }}
+{{- end }}

@@ -1,0 +1,57 @@
+config:
+  spec:
+    destination:
+      server: https://kubernetes.default.svc
+    source:
+      repoURL: git@github.com:finternet-io/helmcharts.git
+      targetRevision: main
+
+applications:
+  - name: keycloak
+    enabled: true
+    namespace: keycloak
+    path: charts/keycloak
+    tool:
+      helm:
+        releaseName: keycloak
+        values: |
+          image:
+            registry: docker.io
+            repository: bitnamilegacy/keycloak
+            tag: 26.3.3-debian-12-r0
+          replicaCount: 2
+          ingress:
+            enabled: false
+
+  - name: yugabyte
+    enabled: false
+    namespace: yugabyte
+    path: charts/yugabyte
+    tool:
+      helm:
+        releaseName: yugabyte
+        values: |
+          Image:
+            repository: yugabyte/yugabyte
+            tag: 2025.1.1.2-b3
+            pullPolicy: IfNotPresent
+
+  # - name: clickstack
+  #   enabled: false      # <— this one will be skipped
+  #   namespace: clickstack
+  #   path: charts/clickstack
+
+  # - name: ingress
+  #   enabled: true
+  #   namespace: kong-ingress
+  #   path: charts/ingress
+
+  # - name: letsencrypt-issuer
+  #   enabled: true
+  #   namespace: cert-manager
+  #   path: charts/letsencrypt-issuer
+
+  # - name: cert-manager
+  #   enabled: true
+  #   namespace: cert-manager
+  #   path: charts/cert-manager

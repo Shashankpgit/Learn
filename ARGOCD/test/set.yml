@@ -1,0 +1,72 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: finternet-apps
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+    - list:
+        elements:
+          - name: keycloak
+            namespace: keycloak
+            path: charts/keycloak
+            valuesObject:
+              image:
+                registry: docker.io
+                repository: bitnami/keycloak
+                tag: 26.3.3-debian-12-r0
+              replicaCount: 2
+              ingress:
+                enabled: false
+
+          - name: yugabyte
+            namespace: yugabyte
+            path: charts/yugabyte
+            valuesObject:
+              replicas:
+                master: 2
+                tserver: 2
+              image:
+                repository: kafka/yugabyte
+                tag: 2025.1.1.2-b3
+                pullPolicy: IfNotPresent
+                pullSecretName: ""
+
+  template:
+    metadata:
+      name: '{{ .name }}'
+      namespace: argocd
+      annotations:
+        argocd.argoproj.io/sync-wave: "0"
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: default
+      source:
+        repoURL: git@github.com:finternet-io/helmcharts.git
+        targetRevision: main
+        path: '{{ .path }}'
+        helm:
+          values: |
+            {{ toYaml .valuesObject | nindent 12 }}
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{ .namespace }}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+
+  # optional: you can use templatePatches to modify per-element pieces cleanly
+  # templatePatches:
+  #   - patch: |
+  #       spec:
+  #         source:
+  #           helm:
+  #             values: |
+  #               {{ toYaml .valuesObject | nindent 16 }}
+  #     # only patch if the element defines valuesObject
+  #     include: "{{ if .valuesObject }}true{{ end }}"

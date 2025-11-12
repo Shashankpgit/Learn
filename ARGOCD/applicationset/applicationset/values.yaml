@@ -6,26 +6,46 @@ targetRevision: main
 
 charts:
   - name: keycloak
+    enabled: true
     namespace: keycloak
     path: charts/keycloak
     valuesObject:
       image:
         registry: docker.io
-        repository: bitnami/keycloak
+        repository: bitnamilegacy/keycloak
         tag: 26.3.3-debian-12-r0
       replicaCount: 2
       ingress:
         enabled: false
 
   - name: yugabyte
-    enabled: false
+    enabled: true
     namespace: yugabyte
     path: charts/yugabyte
     valuesObject:
       Image:
-        repository: kafka/yugabyte
+        repository: yugabyte/yugabyte
         tag: 2025.1.1.2-b3
         pullPolicy: IfNotPresent
         pullSecretName: ""
 
+  - name: clickstack
+    enabled: true
+    namespace: clickstack
+    path: charts/clickstack
 
+  - name: ingress
+    enabled: true
+    namespace: kong-ingress
+    path: charts/ingress
+
+
+  - name: letsencrypt-issuer
+    enabled: true
+    namespace: cert-manager
+    path: charts/letsencrypt-issuer
+
+  - name: cert-manager
+    enabled: true
+    namespace: cert-manager
+    path: charts/cert-manager
