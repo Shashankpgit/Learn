@@ -1,0 +1,1310 @@
+basePath: /v1
+definitions:
+  example.BadRequestExample:
+    properties:
+      err:
+        example: BAD_REQUEST
+        type: string
+      errmsg:
+        example: Invalid request body
+        type: string
+      msgid:
+        example: a1b2c3d4-e5f6-7890-1234-567890abcdef
+        type: string
+      status:
+        example: failed
+        type: string
+    type: object
+  example.DocumentNotFoundExample:
+    properties:
+      err:
+        example: DOCUMENT_NOT_FOUND
+        type: string
+      errmsg:
+        example: Document ID not found
+        type: string
+      msgid:
+        example: a1b2c3d4-e5f6-7890-1234-567890abcdef
+        type: string
+      status:
+        example: failed
+        type: string
+    type: object
+  example.ErrorEnvelope-example_BadRequestExample:
+    properties:
+      id:
+        example: api_id
+        type: string
+      params:
+        $ref: '#/definitions/example.BadRequestExample'
+      response:
+        type: object
+      ts:
+        example: "2025-09-08T12:00:00Z"
+        type: string
+      ver:
+        example: v1
+        type: string
+    type: object
+  example.ErrorEnvelope-example_DocumentNotFoundExample:
+    properties:
+      id:
+        example: api_id
+        type: string
+      params:
+        $ref: '#/definitions/example.DocumentNotFoundExample'
+      response:
+        type: object
+      ts:
+        example: "2025-09-08T12:00:00Z"
+        type: string
+      ver:
+        example: v1
+        type: string
+    type: object
+  example.ErrorEnvelope-example_NotFoundExample:
+    properties:
+      id:
+        example: api_id
+        type: string
+      params:
+        $ref: '#/definitions/example.NotFoundExample'
+      response:
+        type: object
+      ts:
+        example: "2025-09-08T12:00:00Z"
+        type: string
+      ver:
+        example: v1
+        type: string
+    type: object
+  example.ErrorEnvelope-example_ParamsInternalExample:
+    properties:
+      id:
+        example: api_id
+        type: string
+      params:
+        $ref: '#/definitions/example.ParamsInternalExample'
+      response:
+        type: object
+      ts:
+        example: "2025-09-08T12:00:00Z"
+        type: string
+      ver:
+        example: v1
+        type: string
+    type: object
+  example.ErrorEnvelope-example_UnauthorizedExample:
+    properties:
+      id:
+        example: api_id
+        type: string
+      params:
+        $ref: '#/definitions/example.UnauthorizedExample'
+      response:
+        type: object
+      ts:
+        example: "2025-09-08T12:00:00Z"
+        type: string
+      ver:
+        example: v1
+        type: string
+    type: object
+  example.HealthCheck:
+    properties:
+      is_up:
+        example: true
+        type: boolean
+      name:
+        example: Postgre
+        type: string
+      status:
+        example: Up
+        type: string
+    type: object
+  example.HealthCheckError:
+    properties:
+      is_up:
+        example: false
+        type: boolean
+      message:
+        example: 'failed to connect to ''host=localhost user=postgres database=wrongdb'':
+          server error (FATAL: database "wrongdb" does not exist (SQLSTATE 3D000))'
+        type: string
+      name:
+        example: Postgre
+        type: string
+      status:
+        example: Down
+        type: string
+    type: object
+  example.HealthCheckResponse:
+    properties:
+      code:
+        example: 200
+        type: integer
+      is_healthy:
+        example: true
+        type: boolean
+      message:
+        example: Health check completed
+        type: string
+      result:
+        items:
+          $ref: '#/definitions/example.HealthCheck'
+        type: array
+      status:
+        example: success
+        type: string
+    type: object
+  example.HealthCheckResponseError:
+    properties:
+      code:
+        example: 500
+        type: integer
+      is_healthy:
+        example: false
+        type: boolean
+      message:
+        example: Health check completed
+        type: string
+      result:
+        items:
+          $ref: '#/definitions/example.HealthCheckError'
+        type: array
+      status:
+        example: error
+        type: string
+    type: object
+  example.NotFoundExample:
+    properties:
+      err:
+        example: CREDENTIAL_NOT_FOUND
+        type: string
+      errmsg:
+        example: Credential not found
+        type: string
+      msgid:
+        example: a1b2c3d4-e5f6-7890-1234-567890abcdef
+        type: string
+      status:
+        example: failed
+        type: string
+    type: object
+  example.ParamsInternalExample:
+    properties:
+      err:
+        example: INTERNAL_SERVER_ERROR
+        type: string
+      errmsg:
+        example: Internal server error
+        type: string
+      msgid:
+        example: a1b2c3d4-e5f6-7890-1234-567890abcdef
+        type: string
+      status:
+        example: failed
+        type: string
+    type: object
+  example.UnauthorizedExample:
+    properties:
+      err:
+        example: UNAUTHORIZED
+        type: string
+      errmsg:
+        example: Unauthorized. The JWT is missing, invalid, or expired
+        type: string
+      msgid:
+        example: a1b2c3d4-e5f6-7890-1234-567890abcdef
+        type: string
+      status:
+        example: failed
+        type: string
+    type: object
+  response.ActorProfile:
+    properties:
+      countryOfIncorporation:
+        description: Business fields
+        example: US
+        type: string
+      countryOfResidence:
+        example: US
+        type: string
+      did:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      email:
+        example: actor@example.com
+        type: string
+      entityType:
+        example: Individual
+        type: string
+      firstName:
+        example: John
+        type: string
+      lastName:
+        example: Doe
+        type: string
+      masterPublicKey:
+        example: |-
+          -----BEGIN PUBLIC KEY-----
+          MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA...
+          -----END PUBLIC KEY-----
+        type: string
+      nationality:
+        description: Individual fields
+        example: US
+        type: string
+      phoneNumber:
+        example: "+1234567890"
+        type: string
+      universalIdentifier:
+        example: actor123
+        type: string
+      verificationLevel:
+        example: Tier0_Unverified
+        type: string
+    type: object
+  response.AddCredentialSuccessResponse:
+    properties:
+      credentialId:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      message:
+        example: Credential submitted successfully. Verification is in progress.
+        type: string
+      status:
+        example: Pending
+        type: string
+    type: object
+  response.ApiResponse:
+    properties:
+      id:
+        example: api.actor.create
+        type: string
+      params:
+        $ref: '#/definitions/response.ApiResponseParams'
+      response: {}
+      ts:
+        example: "2023-01-01T00:00:00Z"
+        type: string
+      ver:
+        example: v1
+        type: string
+    type: object
+  response.ApiResponse_ActorProfile:
+    properties:
+      id:
+        example: api.actor.create
+        type: string
+      params:
+        $ref: '#/definitions/response.ApiResponseParams'
+      response:
+        $ref: '#/definitions/response.ActorProfile'
+      ts:
+        example: "2023-01-01T00:00:00Z"
+        type: string
+      ver:
+        example: v1
+        type: string
+    type: object
+  response.ApiResponse_Error:
+    properties:
+      id:
+        example: api.actor.create
+        type: string
+      params:
+        $ref: '#/definitions/response.ApiResponseParams'
+      response: {}
+      ts:
+        example: "2023-01-01T00:00:00Z"
+        type: string
+      ver:
+        example: v1
+        type: string
+    type: object
+  response.ApiResponse_RegistrationSuccess:
+    properties:
+      id:
+        example: api.actor.create
+        type: string
+      params:
+        $ref: '#/definitions/response.ApiResponseParams'
+      response:
+        $ref: '#/definitions/response.RegistrationSuccessResponse'
+      ts:
+        example: "2023-01-01T00:00:00Z"
+        type: string
+      ver:
+        example: v1
+        type: string
+    type: object
+  response.ApiResponse_ResolveResponse:
+    properties:
+      id:
+        example: api.actor.create
+        type: string
+      params:
+        $ref: '#/definitions/response.ApiResponseParams'
+      response:
+        $ref: '#/definitions/response.ResolveResponse'
+      ts:
+        example: "2023-01-01T00:00:00Z"
+        type: string
+      ver:
+        example: v1
+        type: string
+    type: object
+  response.ApiResponse_Success:
+    properties:
+      id:
+        example: api.actor.create
+        type: string
+      params:
+        $ref: '#/definitions/response.ApiResponseParams'
+      response:
+        $ref: '#/definitions/response.SuccessResponse'
+      ts:
+        example: "2023-01-01T00:00:00Z"
+        type: string
+      ver:
+        example: v1
+        type: string
+    type: object
+  response.ApiResponseParams:
+    properties:
+      err:
+        type: string
+      errmsg:
+        type: string
+      msgid:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      status:
+        example: successful
+        type: string
+    type: object
+  response.CredentialsSuccessResponse:
+    properties:
+      credentialId:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      status:
+        example: Pending
+        type: string
+      submittedAt:
+        example: "2025-10-23T06:25:25.191Z"
+        type: string
+      type:
+        example: VerifiableCredential
+        type: string
+    type: object
+  response.DeleteCredentialResponse:
+    properties:
+      message:
+        example: Operation successfully.
+        type: string
+    type: object
+  response.ListCredentialsSuccessResponse:
+    properties:
+      credentials:
+        items:
+          $ref: '#/definitions/response.CredentialsSuccessResponse'
+        type: array
+    type: object
+  response.RegistrationSuccessResponse:
+    properties:
+      did:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      message:
+        example: Actor registered successfully
+        type: string
+    type: object
+  response.Request-validation_AddCredentialRequest:
+    properties:
+      id:
+        example: api_id
+        type: string
+      params:
+        $ref: '#/definitions/response.RequestParams'
+      request:
+        $ref: '#/definitions/validation.AddCredentialRequest'
+      ts:
+        example: "2025-09-08T12:00:00Z"
+        type: string
+      ver:
+        example: v1
+        type: string
+    type: object
+  response.Request-validation_DeleteCredentialRequest:
+    properties:
+      id:
+        example: api_id
+        type: string
+      params:
+        $ref: '#/definitions/response.RequestParams'
+      request:
+        $ref: '#/definitions/validation.DeleteCredentialRequest'
+      ts:
+        example: "2025-09-08T12:00:00Z"
+        type: string
+      ver:
+        example: v1
+        type: string
+    type: object
+  response.Request-validation_GetCredentialRequest:
+    properties:
+      id:
+        example: api_id
+        type: string
+      params:
+        $ref: '#/definitions/response.RequestParams'
+      request:
+        $ref: '#/definitions/validation.GetCredentialRequest'
+      ts:
+        example: "2025-09-08T12:00:00Z"
+        type: string
+      ver:
+        example: v1
+        type: string
+    type: object
+  response.Request-validation_ListCredentialsRequest:
+    properties:
+      id:
+        example: api_id
+        type: string
+      params:
+        $ref: '#/definitions/response.RequestParams'
+      request:
+        $ref: '#/definitions/validation.ListCredentialsRequest'
+      ts:
+        example: "2025-09-08T12:00:00Z"
+        type: string
+      ver:
+        example: v1
+        type: string
+    type: object
+  response.RequestParams:
+    properties:
+      msgid:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+    type: object
+  response.ResolveResponse:
+    properties:
+      did:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      masterPublicKey:
+        example: |-
+          -----BEGIN PUBLIC KEY-----
+          MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA...
+          -----END PUBLIC KEY-----
+        type: string
+      universalIdentifier:
+        example: user123
+        type: string
+    type: object
+  response.Response-response_AddCredentialSuccessResponse:
+    properties:
+      id:
+        example: api_id
+        type: string
+      params:
+        $ref: '#/definitions/response.ResponseParams'
+      response:
+        $ref: '#/definitions/response.AddCredentialSuccessResponse'
+      responseCode:
+        type: string
+      ts:
+        example: "2025-09-08T12:00:00Z"
+        type: string
+      ver:
+        example: v1
+        type: string
+    type: object
+  response.Response-response_CredentialsSuccessResponse:
+    properties:
+      id:
+        example: api_id
+        type: string
+      params:
+        $ref: '#/definitions/response.ResponseParams'
+      response:
+        $ref: '#/definitions/response.CredentialsSuccessResponse'
+      responseCode:
+        type: string
+      ts:
+        example: "2025-09-08T12:00:00Z"
+        type: string
+      ver:
+        example: v1
+        type: string
+    type: object
+  response.Response-response_DeleteCredentialResponse:
+    properties:
+      id:
+        example: api_id
+        type: string
+      params:
+        $ref: '#/definitions/response.ResponseParams'
+      response:
+        $ref: '#/definitions/response.DeleteCredentialResponse'
+      responseCode:
+        type: string
+      ts:
+        example: "2025-09-08T12:00:00Z"
+        type: string
+      ver:
+        example: v1
+        type: string
+    type: object
+  response.Response-response_ListCredentialsSuccessResponse:
+    properties:
+      id:
+        example: api_id
+        type: string
+      params:
+        $ref: '#/definitions/response.ResponseParams'
+      response:
+        $ref: '#/definitions/response.ListCredentialsSuccessResponse'
+      responseCode:
+        type: string
+      ts:
+        example: "2025-09-08T12:00:00Z"
+        type: string
+      ver:
+        example: v1
+        type: string
+    type: object
+  response.Response-response_UploadCredentialResponse:
+    properties:
+      id:
+        example: api_id
+        type: string
+      params:
+        $ref: '#/definitions/response.ResponseParams'
+      response:
+        $ref: '#/definitions/response.UploadCredentialResponse'
+      responseCode:
+        type: string
+      ts:
+        example: "2025-09-08T12:00:00Z"
+        type: string
+      ver:
+        example: v1
+        type: string
+    type: object
+  response.ResponseParams:
+    properties:
+      err:
+        type: string
+      errmsg:
+        type: string
+      msgid:
+        type: string
+      resmsgid:
+        type: string
+      status:
+        type: string
+    type: object
+  response.SuccessResponse:
+    properties:
+      message:
+        example: Operation completed successfully
+        type: string
+    type: object
+  response.UploadCredentialResponse:
+    properties:
+      documentId:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      status:
+        example: Uploaded. Awaiting verification.
+        type: string
+    type: object
+  validation.AddCredentialRequest:
+    properties:
+      payload:
+        $ref: '#/definitions/validation.CredentialPayload'
+      verificationType:
+        example: VC
+        type: string
+    type: object
+  validation.ApiRequest_Empty:
+    properties:
+      id:
+        example: api.actor.create
+        type: string
+      params:
+        $ref: '#/definitions/validation.RequestParams'
+      request:
+        type: object
+      ts:
+        example: "2023-01-01T00:00:00Z"
+        type: string
+      ver:
+        example: 5.0.0
+        type: string
+    required:
+    - id
+    - ts
+    - ver
+    type: object
+  validation.ApiRequest_ForgotPasswordRequest:
+    properties:
+      id:
+        example: api.actor.create
+        type: string
+      params:
+        $ref: '#/definitions/validation.RequestParams'
+      request:
+        $ref: '#/definitions/validation.ForgotPasswordRequest'
+      ts:
+        example: "2023-01-01T00:00:00Z"
+        type: string
+      ver:
+        example: 5.0.0
+        type: string
+    required:
+    - id
+    - ts
+    - ver
+    type: object
+  validation.ApiRequest_LoginRequest:
+    properties:
+      id:
+        example: api.actor.create
+        type: string
+      params:
+        $ref: '#/definitions/validation.RequestParams'
+      request:
+        $ref: '#/definitions/validation.LoginRequest'
+      ts:
+        example: "2023-01-01T00:00:00Z"
+        type: string
+      ver:
+        example: 5.0.0
+        type: string
+    required:
+    - id
+    - ts
+    - ver
+    type: object
+  validation.ApiRequest_RegistrationRequest:
+    properties:
+      id:
+        example: api.actor.create
+        type: string
+      params:
+        $ref: '#/definitions/validation.RequestParams'
+      request:
+        $ref: '#/definitions/validation.RegistrationRequest'
+      ts:
+        example: "2023-01-01T00:00:00Z"
+        type: string
+      ver:
+        example: 5.0.0
+        type: string
+    required:
+    - id
+    - ts
+    - ver
+    type: object
+  validation.ApiRequest_ResolveRequest:
+    properties:
+      id:
+        example: api.actor.create
+        type: string
+      params:
+        $ref: '#/definitions/validation.RequestParams'
+      request:
+        $ref: '#/definitions/validation.ResolveRequest'
+      ts:
+        example: "2023-01-01T00:00:00Z"
+        type: string
+      ver:
+        example: 5.0.0
+        type: string
+    required:
+    - id
+    - ts
+    - ver
+    type: object
+  validation.ApiRequest_UpdateActorRequest:
+    properties:
+      id:
+        example: api.actor.create
+        type: string
+      params:
+        $ref: '#/definitions/validation.RequestParams'
+      request:
+        $ref: '#/definitions/validation.UpdateActorRequest'
+      ts:
+        example: "2023-01-01T00:00:00Z"
+        type: string
+      ver:
+        example: 5.0.0
+        type: string
+    required:
+    - id
+    - ts
+    - ver
+    type: object
+  validation.CredentialPayload:
+    properties:
+      documentId:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      verifiableCredential:
+        $ref: '#/definitions/validation.VerifiableCredential'
+    type: object
+  validation.DeleteCredentialRequest:
+    properties:
+      credentialId:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+    type: object
+  validation.ForgotPasswordRequest:
+    properties:
+      email:
+        example: actor@example.com
+        type: string
+    required:
+    - email
+    type: object
+  validation.GetCredentialRequest:
+    properties:
+      credentialId:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+    type: object
+  validation.ListCredentialsRequest:
+    type: object
+  validation.LoginRequest:
+    properties:
+      password:
+        example: password123
+        type: string
+      username:
+        example: alice@finternet
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  validation.RegistrationRequest:
+    properties:
+      countryOfIncorporation:
+        description: Business fields
+        example: US
+        type: string
+      countryOfResidence:
+        example: US
+        type: string
+      email:
+        example: actor@example.com
+        type: string
+      entityType:
+        enum:
+        - Individual
+        - Business
+        example: Individual
+        type: string
+      firstName:
+        example: John
+        type: string
+      lastName:
+        example: Doe
+        type: string
+      masterPublicKey:
+        example: |-
+          -----BEGIN PUBLIC KEY-----
+          MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA...
+          -----END PUBLIC KEY-----
+        type: string
+      nationality:
+        description: Individual fields
+        example: US
+        type: string
+      password:
+        example: password123
+        minLength: 8
+        type: string
+      phoneNumber:
+        example: "+1234567890"
+        type: string
+      universalIdentifier:
+        example: actor123
+        type: string
+    required:
+    - email
+    - entityType
+    - firstName
+    - lastName
+    - masterPublicKey
+    - password
+    - universalIdentifier
+    type: object
+  validation.RequestParams:
+    properties:
+      msgid:
+        example: 2f7c3a4e-8bcb-4b44-8cf6-84cc8f1d2a87
+        type: string
+    type: object
+  validation.ResolveRequest:
+    properties:
+      universalIdentifier:
+        example: actor123
+        type: string
+    required:
+    - universalIdentifier
+    type: object
+  validation.UpdateActorRequest:
+    properties:
+      firstName:
+        example: Jane
+        type: string
+      lastName:
+        example: Smith
+        type: string
+      phoneNumber:
+        example: "+0987654321"
+        type: string
+    type: object
+  validation.VerifiableCredential:
+    properties:
+      '@context':
+        example:
+        - https://www.w3.org/2018/credentials/v1
+        items:
+          type: string
+        type: array
+      credentialSubject:
+        additionalProperties: true
+        type: object
+      id:
+        example: http://example.edu/credentials/3732
+        type: string
+      issuanceDate:
+        example: "2025-10-23T06:25:25.191Z"
+        type: string
+      issuer:
+        example: did:example:issuer
+        type: string
+      proof:
+        additionalProperties: true
+        type: object
+      type:
+        example:
+        - VerifiableCredential
+        items:
+          type: string
+        type: array
+    type: object
+host: localhost:3000
+info:
+  contact: {}
+  license:
+    name: MIT
+  title: Finternet UNITS APIs Documentation
+  version: 1.0.0
+paths:
+  /credentials/add:
+    post:
+      description: Submits a credential (VC or manual document ref) for asynchronous
+        verification, creating a credential token in 'Pending' state.
+      parameters:
+      - description: Request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/response.Request-validation_AddCredentialRequest'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Credential accepted for verification
+          schema:
+            $ref: '#/definitions/response.Response-response_AddCredentialSuccessResponse'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/example.ErrorEnvelope-example_BadRequestExample'
+        "401":
+          description: Unauthorized. JWT missing, invalid, or expired.
+          schema:
+            $ref: '#/definitions/example.ErrorEnvelope-example_UnauthorizedExample'
+        "404":
+          description: Document ID not found
+          schema:
+            $ref: '#/definitions/example.ErrorEnvelope-example_DocumentNotFoundExample'
+      summary: Add a credential for verification
+      tags:
+      - Credentials
+  /credentials/delete:
+    post:
+      description: Delete credential for a user
+      parameters:
+      - description: Request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/response.Request-validation_DeleteCredentialRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response-response_DeleteCredentialResponse'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/example.ErrorEnvelope-example_BadRequestExample'
+        "401":
+          description: Unauthorized. JWT missing, invalid, or expired.
+          schema:
+            $ref: '#/definitions/example.ErrorEnvelope-example_UnauthorizedExample'
+        "404":
+          description: Credential not found
+          schema:
+            $ref: '#/definitions/example.ErrorEnvelope-example_NotFoundExample'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/example.ErrorEnvelope-example_ParamsInternalExample'
+      summary: Delete credential
+      tags:
+      - Credentials
+  /credentials/get:
+    post:
+      description: Get credential for a user
+      parameters:
+      - description: Request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/response.Request-validation_GetCredentialRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response-response_CredentialsSuccessResponse'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/example.ErrorEnvelope-example_BadRequestExample'
+        "401":
+          description: Unauthorized. JWT missing, invalid, or expired.
+          schema:
+            $ref: '#/definitions/example.ErrorEnvelope-example_UnauthorizedExample'
+        "404":
+          description: Credential not found
+          schema:
+            $ref: '#/definitions/example.ErrorEnvelope-example_NotFoundExample'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/example.ErrorEnvelope-example_ParamsInternalExample'
+      summary: Get credential
+      tags:
+      - Credentials
+  /credentials/list:
+    post:
+      description: List all credentials for a user
+      parameters:
+      - description: Request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/response.Request-validation_ListCredentialsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response-response_ListCredentialsSuccessResponse'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/example.ErrorEnvelope-example_BadRequestExample'
+        "401":
+          description: Unauthorized. JWT missing, invalid, or expired.
+          schema:
+            $ref: '#/definitions/example.ErrorEnvelope-example_UnauthorizedExample'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/example.ErrorEnvelope-example_ParamsInternalExample'
+      summary: List credentials
+      tags:
+      - Credentials
+  /credentials/upload:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Uploads a document (e.g., passport) for manual verification. Returns
+        a document ID used in /credentials/add.
+      parameters:
+      - description: Document to upload
+        in: formData
+        name: document
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Document uploaded successfully
+          schema:
+            $ref: '#/definitions/response.Response-response_UploadCredentialResponse'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/example.ErrorEnvelope-example_BadRequestExample'
+        "401":
+          description: Unauthorized. JWT missing, invalid, or expired.
+          schema:
+            $ref: '#/definitions/example.ErrorEnvelope-example_UnauthorizedExample'
+      summary: Upload a document for verification
+      tags:
+      - Credentials
+  /health-check:
+    get:
+      consumes:
+      - application/json
+      description: Check the status of services and database connections
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/example.HealthCheckResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/example.HealthCheckResponseError'
+      summary: Health Check
+      tags:
+      - Health
+  /v1/actor/create:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new user actor, generates and stores the reproducible
+        DID from the master public key, and links them.
+      parameters:
+      - description: Request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/validation.ApiRequest_RegistrationRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.ApiResponse_RegistrationSuccess'
+        "400":
+          description: Bad request, such as a missing required field
+          schema:
+            $ref: '#/definitions/response.ApiResponse_Error'
+        "409":
+          description: Conflict, an identifier is already in use
+          schema:
+            $ref: '#/definitions/response.ApiResponse_Error'
+      summary: Register a new actor
+      tags:
+      - Actor
+  /v1/actor/forgotPassword:
+    post:
+      consumes:
+      - application/json
+      description: Initiates the password reset flow for a given email address. A
+        reset link will be sent to the user's email.
+      parameters:
+      - description: Request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/validation.ApiRequest_ForgotPasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse_Success'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/response.ApiResponse_Error'
+      summary: Forgot password
+      tags:
+      - Actor
+  /v1/actor/getProfile:
+    post:
+      consumes:
+      - application/json
+      description: Retrieves the full actor profile for the authenticated actor.
+      parameters:
+      - description: Request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/validation.ApiRequest_Empty'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse_ActorProfile'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ApiResponse_Error'
+      security:
+      - BearerAuth: []
+      summary: Get current actor's profile
+      tags:
+      - Actor
+  /v1/actor/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates an actor and returns JWT tokens
+      parameters:
+      - description: Request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/validation.ApiRequest_LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login successful
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/response.ApiResponse_Error'
+        "401":
+          description: Invalid credentials
+          schema:
+            $ref: '#/definitions/response.ApiResponse_Error'
+      summary: Login actor
+      tags:
+      - Actor
+  /v1/actor/resolve:
+    post:
+      consumes:
+      - application/json
+      description: Publicly resolves a universal identifier to its master public key
+        and DID.
+      parameters:
+      - description: Request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/validation.ApiRequest_ResolveRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse_ResolveResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/response.ApiResponse_Error'
+      summary: Resolve a universal identifier
+      tags:
+      - Actor
+  /v1/actor/signout:
+    post:
+      consumes:
+      - application/json
+      description: Logs out the user from auth provider and revokes all their active
+        sessions.
+      parameters:
+      - description: Request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/validation.ApiRequest_Empty'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse_Success'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ApiResponse_Error'
+      security:
+      - BearerAuth: []
+      summary: Actor signout
+      tags:
+      - Actor
+  /v1/actor/update:
+    post:
+      consumes:
+      - application/json
+      description: Allows an authenticated user to update their profile information,
+        such as name and phone number. The actor to update is determined by the session
+        token.
+      parameters:
+      - description: Request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/validation.ApiRequest_UpdateActorRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse_ActorProfile'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/response.ApiResponse_Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ApiResponse_Error'
+        "409":
+          description: Conflict, the new phone number is already in use
+          schema:
+            $ref: '#/definitions/response.ApiResponse_Error'
+      security:
+      - BearerAuth: []
+      summary: Update actor profile
+      tags:
+      - Actor
+swagger: "2.0"

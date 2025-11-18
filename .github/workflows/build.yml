@@ -1,0 +1,51 @@
+name: Build and Push to GHCR
+run-name: Workflow run for ${{ github.ref }} # here github.ref is the branch or tag ref that triggered the workflow
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-push:
+    name: Build and Push Docker Image to GHCR
+    runs-on: ubuntu-latest 
+
+    permissions:
+      contents: read
+      packages: write    # Required to push to ghcr.io
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+            # ✅ Step 1: Set up Go
+    #   - name: Set up Go
+    #     uses: actions/setup-go@v5
+    #     with:
+    #       go-version-file: ./workflow/go.mod
+      
+    #   - name: Download dependencies
+    #     run: | 
+    #       cd workflow
+    #       go mod tidy
+
+    #   - name: Run Go tests
+    #     run: |
+    #       cd workflow
+    #       go test ./... -v
+
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Set image name
+        run: echo "IMAGE_NAME=ghcr.io/$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')/myapp:${{ github.ref_name }}" >> $GITHUB_ENV
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+            context: ./workflow
+            push: true
+            tags: ${{ env.IMAGE_NAME }}
+
+            # tags: ghcr.io/${{ github.repository_owner }}/myapp:${{ github.ref_name }}
