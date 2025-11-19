@@ -34,3 +34,6 @@ logs/
 
 # Other
 secrets.yml
+
+# Terraform
+.terraform/
