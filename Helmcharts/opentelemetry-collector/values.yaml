@@ -6,7 +6,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 # Valid values are "daemonset", "deployment", and "statefulset".
-mode: ""
+mode: "deployment"
 
 # Specify which namespace should be used to deploy the resources into
 namespaceOverride: ""
@@ -27,7 +27,7 @@ presets:
   # Best used with mode = daemonset.
   # See https://opentelemetry.io/docs/kubernetes/collector/components/#filelog-receiver for details on the receiver.
   logsCollection:
-    enabled: false
+    enabled: true
     includeCollectorLogs: false
     # Enabling this writes checkpoints in /var/lib/otelcol/ host directory.
     # Note this changes collector's user to root, so that it can write to host directory.
@@ -138,6 +138,13 @@ internalTelemetryViaOTLP:
 config:
   exporters:
     debug: {}
+    # Export to HyperDX OTEL Collector
+    otlp/hyperdx:
+      endpoint: clickstack-hdx-oss-v2-otel-collector.clickstack.svc.cluster.local:4317
+      tls:
+        insecure: true
+      headers:
+        authorization: "3deae3f4-9f64-4aca-a7ae-6cbb107cd0b0"
   extensions:
     # The health_check extension is mandatory for this chart.
     # Without the health_check extension the collector will fail the readiness and liveness probes.
@@ -178,8 +185,21 @@ config:
             static_configs:
               - targets:
                   - ${env:MY_POD_IP}:8888
+          # Scrape Keycloak metrics
+          - job_name: keycloak
+            scrape_interval: 30s
+            static_configs:
+              - targets:
+                  - keycloak-metrics.keycloak.svc.cluster.local:9000
+            metrics_path: /metrics
     zipkin:
       endpoint: ${env:MY_POD_IP}:9411
+    # Collect Keycloak logs from files
+    filelog/keycloak:
+      include: [/var/log/containers/keycloak-*.log]
+      start_at: beginning
+      include_file_path: true
+      include_file_name: false
   service:
     telemetry:
       metrics:
@@ -195,14 +215,17 @@ config:
       logs:
         exporters:
           - debug
+          - otlp/hyperdx
         processors:
           - memory_limiter
           - batch
         receivers:
           - otlp
+          - filelog/keycloak
       metrics:
         exporters:
           - debug
+          - otlp/hyperdx
         processors:
           - memory_limiter
           - batch
@@ -213,6 +236,7 @@ config:
       traces:
         exporters:
           - debug
+          - otlp/hyperdx
         processors:
           - memory_limiter
           - batch
@@ -240,7 +264,7 @@ alternateConfig: {}
 
 image:
   # If you want to use the core image `otel/opentelemetry-collector`, you also need to change `command.name` value to `otelcol`.
-  repository: ""
+  repository: "otel/opentelemetry-collector-contrib"
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
@@ -250,7 +274,7 @@ imagePullSecrets: []
 
 # OpenTelemetry Collector executable
 command:
-  name: ""
+  name: "otelcol-contrib"
   extraArgs: []
 
 serviceAccount:
