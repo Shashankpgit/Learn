@@ -822,10 +822,10 @@ server:
   # use dev mode for anything other than experimenting.
   # See https://developer.hashicorp.com/vault/docs/concepts/dev-server to know more
   dev:
-    enabled: false
+    enabled: true
 
     # Set VAULT_DEV_ROOT_TOKEN_ID value
-    devRootToken: "root"
+    devRootToken: "dev-token"
 
   # Run Vault in "standalone" mode. This is the default mode that will deploy if
   # no arguments are given to helm. This requires a PVC for data storage to use

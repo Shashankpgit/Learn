@@ -1,0 +1,100 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "vault-bootstrap.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  annotations:
+{{ toYaml .Values.job.annotations | indent 4 }}
+spec:
+  backoffLimit: 5
+  template:
+    spec:
+      serviceAccountName: {{ .Values.job.serviceAccountName }}
+      restartPolicy: OnFailure
+      containers:
+        - name: bootstrap
+          image: {{ .Values.job.image }}
+          env:
+            - name: VAULT_ADDR
+              value: {{ .Values.vault.address | quote }}
+            - name: VAULT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.vault.bootstrapTokenSecret.name }}
+                  key: {{ .Values.vault.bootstrapTokenSecret.key }}
+            - name: KEYCLOAK_URL
+              value: {{ .Values.vault.keycloak.url | quote }}
+            - name: KEYCLOAK_REALM
+              value: {{ .Values.vault.keycloak.realm | quote }}
+            - name: KEYCLOAK_CLIENT_ID
+              value: {{ .Values.vault.keycloak.clientId | quote }}
+          volumeMounts:
+            - name: policies
+              mountPath: /vault/policies
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+
+              echo "[vault-bootstrap] Waiting for Vault to be ready..."
+              until vault status > /dev/null 2>&1; do
+                echo "  Vault not ready yet, retrying..."
+                sleep 2
+              done
+              echo "  ✓ Vault is ready"
+
+              echo "[vault-bootstrap] Enabling secrets engines..."
+              vault secrets enable -path=transit transit 2>/dev/null || echo "  transit already enabled"
+              vault secrets enable -path=secret kv-v2 2>/dev/null || echo "  secret already enabled"
+
+              echo "[vault-bootstrap] Creating master encryption key..."
+              vault write -f transit/keys/units-encryption-master type=aes256-gcm96 2>/dev/null || echo "  key already exists"
+
+              if [ -n "$KEYCLOAK_URL" ] && [ -n "$KEYCLOAK_REALM" ]; then
+                echo "[vault-bootstrap] Configuring JWT authentication with Keycloak..."
+                KEYCLOAK_JWKS_URL="${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/certs"
+
+                vault auth enable jwt 2>/dev/null || echo "  jwt already enabled"
+
+                vault write auth/jwt/config \
+                  jwks_url="$KEYCLOAK_JWKS_URL" \
+                  default_role="finternet-user"
+
+                vault write auth/jwt/role/finternet-user \
+                  bound_audiences="account,units,${KEYCLOAK_CLIENT_ID}" \
+                  user_claim="sub" \
+                  role_type="jwt" \
+                  token_policies="user-transit-keys,user-pii-encryption" \
+                  token_ttl=1h \
+                  token_max_ttl=24h
+              else
+                echo "[vault-bootstrap] KEYCLOAK_URL/REALM not set, skipping JWT config"
+              fi
+
+              echo "[vault-bootstrap] Applying policies..."
+              vault policy write user-transit-keys /vault/policies/user-transit-keys.hcl
+              vault policy write user-pii-encryption /vault/policies/user-pii-encryption.hcl
+              vault policy write service-admin /vault/policies/service-admin.hcl
+
+              echo "[vault-bootstrap] Configuring AppRole for service..."
+              vault auth enable approle 2>/dev/null || echo "  approle already enabled"
+              vault write auth/approle/role/service-app \
+                token_policies="service-admin" \
+                token_ttl=1h \
+                token_max_ttl=24h \
+                secret_id_ttl=0 \
+                secret_id_num_uses=0
+
+              echo "[vault-bootstrap] Writing AppRole credentials to KV..."
+              ROLE_ID=$(vault read -field=role_id auth/approle/role/service-app/role-id)
+              SECRET_ID=$(vault write -field=secret_id -f auth/approle/role/service-app/secret-id)
+              vault kv put secret/approle/service-app role_id="$ROLE_ID" secret_id="$SECRET_ID" 2>/dev/null || true
+
+              echo "[vault-bootstrap] Done."
+      volumes:
+        - name: policies
+          configMap:
+            name: {{ include "vault-bootstrap.fullname" . }}-policies
+
+

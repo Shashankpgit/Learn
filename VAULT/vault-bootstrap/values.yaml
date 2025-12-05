@@ -1,0 +1,117 @@
+vault:
+  # Address of the Vault service as seen from inside the cluster.
+  address: "http://vault.vault.svc:8200"
+
+  # Bootstrap token Secret configuration
+  bootstrapTokenSecret:
+    name: "vault-bootstrap-token"
+    key: "VAULT_TOKEN"
+    
+    # Automatically create the Secret (useful for dev mode)
+    # Set to true to have the chart create the Secret automatically
+    # Set to false to create it manually (recommended for production)
+    autoCreate: true
+    
+    # Token value to use when autoCreate is true
+    # For dev mode: use "dev-token" (matches server.dev.devRootToken)
+    # For production: leave empty and create Secret manually with root token
+    # WARNING: Do not put production root tokens in values.yaml - use manual Secret creation
+    token: "dev-token"
+
+  # Keycloak JWT auth integration.
+  keycloak:
+    url: "http://keycloak-headless.keycloak.svc.cluster.local:8080"
+    realm: "finternet"
+    clientId: "units"
+
+policies:
+  # Equivalent to the user-transit-keys policy from the docker-compose startup script.
+  userTransitKeys: |
+    # Allow users to read their own key metadata
+    path "transit/keys/{{identity.entity.id}}-*" {
+      capabilities = ["read"]
+    }
+
+    # Allow users to sign with their own keys
+    path "transit/sign/{{identity.entity.id}}-*" {
+      capabilities = ["update"]
+    }
+
+    # Allow users to verify signatures with their own keys
+    path "transit/verify/{{identity.entity.id}}-*" {
+      capabilities = ["update"]
+    }
+
+    # Deny access to other users' keys
+    path "transit/sign/*" {
+      capabilities = ["deny"]
+    }
+
+  # Equivalent to the user-pii-encryption policy from the docker-compose startup script.
+  userPiiEncryption: |
+    # Allow users to encrypt their own PII
+    path "transit/encrypt/{{identity.entity.id}}-pii" {
+      capabilities = ["update"]
+    }
+
+    # Allow users to decrypt their own PII
+    path "transit/decrypt/{{identity.entity.id}}-pii" {
+      capabilities = ["update"]
+    }
+
+    # Deny access to other users' PII keys
+    path "transit/encrypt/*-pii" {
+      capabilities = ["deny"]
+    }
+
+    path "transit/decrypt/*-pii" {
+      capabilities = ["deny"]
+    }
+
+  # Equivalent to the service-admin policy from the docker-compose startup script.
+  serviceAdmin: |
+    # Service can create and manage transit keys
+    path "transit/keys/*" {
+      capabilities = ["create", "read", "update", "list"]
+    }
+
+    # Service can configure keys
+    path "transit/keys/*/config" {
+      capabilities = ["update"]
+    }
+
+    # Service can rotate keys
+    path "transit/keys/*/rotate" {
+      capabilities = ["update"]
+    }
+
+    # Service CANNOT sign with user keys (users only)
+    path "transit/sign/*" {
+      capabilities = ["deny"]
+    }
+
+    # Service CANNOT decrypt user PII (users only)
+    path "transit/decrypt/*-pii" {
+      capabilities = ["deny"]
+    }
+
+    # Service CAN use KV secrets for configuration
+    path "secret/data/*" {
+      capabilities = ["create", "read", "update", "delete", "list"]
+    }
+
+    path "secret/metadata/*" {
+      capabilities = ["list", "read", "delete"]
+    }
+
+job:
+  # Vault image containing the CLI; version should track your Vault server version.
+  image: "hashicorp/vault:1.20.4"
+
+  # ServiceAccount that the Job will use. By default the upstream vault chart
+  # creates a service account named "vault" when the release name is "vault".
+  serviceAccountName: "vault"
+
+  annotations: {}
+
+
