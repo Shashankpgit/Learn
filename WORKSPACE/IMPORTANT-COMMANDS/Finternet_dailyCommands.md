@@ -11,7 +11,7 @@ GCP:
   -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}' to set the default storage class
 6. `gcloud container node-pools list --cluster=finternet-dev-cluster --zone=asia-southeast1-a` list nodes
 7. `gcloud container node-pools describe finternet-dev-pool --cluster=finternet-dev-cluster --zone=asia-southeast1-a`
-8. gcloud container clusters get-credentials finternet-pw-lab-dev-cluster \
+8. gcloud container clusters get-credentials finternet-release-dev-cluster \
   --region asia-southeast1-a \
   --project finternet-sandbox  ` to add the kubeconfig`
 9. gsutil rm gs://fintenet-foundry-argocd/terraform/state/default.tflock
@@ -69,6 +69,13 @@ Steps while creating the cluster:
 
 
 
-
+cluster creation started at 11:16:50
+Dummypassword@123
 
 anti-Gravity
+
+
+
+modules changes
+regarding the automation
+regarding the PVC deletion
