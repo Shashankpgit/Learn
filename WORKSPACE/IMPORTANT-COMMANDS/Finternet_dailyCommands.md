@@ -70,12 +70,7 @@ Steps while creating the cluster:
 
 
 cluster creation started at 11:16:50
-Dummypassword@123
+hyperdx@finternetlab.io
+Hyperdx@1234
 
 anti-Gravity
-
-
-
-modules changes
-regarding the automation
-regarding the PVC deletion

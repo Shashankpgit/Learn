@@ -6,16 +6,17 @@
 6. We might need to create the KMS to keep the kubernetes secrets.
 Note: if there is no KMS (or KMS=null or no secrete encryption kms key then throw the warning)
 7. Updated the networking to allow the request from from the certain ranges instead of open to internet (0.0.0.0/0)
+So here it is just to restrict the access. Nothing much.
 8. With respect to service account, we havent given the storage admin role and need to remove the configuration which creates/generates the service account key.
 
 -------------------------------------------------------------------------------------------
 
 -------------------------------------------------------------------------------------------
 
-1. Keep the logging and monitoring none for now
+<!-- 1. Keep the logging and monitoring none for now -->
 2. check which roles are required and which are not and test them out.
-3. enable private nodes
-4. don't disable the Public endpoint for the master plane.
+3. enable private nodes `already we kept it as the private node`
+4. don't disable the Public endpoint for the master plane. `it is already kept false`
 5. since we are keeping the public endpoint, read little bit more about the Point 5
-`(master_ipv4_cidr_block` with the pre-defined CIDR range)`
+`(master_ipv4_cidr_block` with the pre-defined CIDR range)`No need to change anything here`
 6. KMS hold on for now.

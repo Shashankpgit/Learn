@@ -1,0 +1,32 @@
+global:
+  # Disable TLS for local/dev usage; do not use this in real production.
+  tlsDisable: true
+
+server:
+  # Run Vault in dev mode (in-memory, auto-unsealed, single pod).
+  dev:
+    enabled: true
+    # Root token for dev; matches the existing docker-compose setup.
+    devRootToken: "dev-token"
+
+  # Do not enable standalone when dev is on.
+  standalone:
+    enabled: "-"
+
+  # HA is disabled for dev.
+  ha:
+    enabled: false
+
+ui:
+  # Expose the Vault UI inside the cluster.
+  enabled: true
+
+injector:
+  # Sidecar injector is typically not needed for initial dev; can be turned on later.
+  enabled: false
+
+csi:
+  # CSI provider is typically not needed for initial dev.
+  enabled: false
+
+

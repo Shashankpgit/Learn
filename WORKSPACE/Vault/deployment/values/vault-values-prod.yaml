@@ -1,0 +1,42 @@
+global:
+  # For a real production setup you should enable TLS and provide proper certs.
+  # This example keeps tlsDisable=true for simplicity; harden this before going live.
+  tlsDisable: true
+
+server:
+  # Disable dev mode in production.
+  dev:
+    enabled: false
+
+  # Standalone mode remains disabled when using HA.
+  standalone:
+    enabled: "-"
+
+  # Enable HA with integrated Raft storage.
+  ha:
+    enabled: true
+    replicas: 3
+    raft:
+      enabled: true
+      # You can customize the Raft config if needed; defaults from the chart are reasonable.
+
+  # Persistent storage for Vault data.
+  dataStorage:
+    enabled: true
+    size: 10Gi
+    # Replace with your cluster's StorageClass name.
+    storageClass: ""
+
+ui:
+  # Expose the Vault UI via a ClusterIP service.
+  enabled: true
+
+injector:
+  # Enable Vault Agent injector so workloads can consume secrets via sidecars.
+  enabled: true
+
+csi:
+  # Enable later if you adopt the secrets-store-csi-driver workflow.
+  enabled: false
+
+
