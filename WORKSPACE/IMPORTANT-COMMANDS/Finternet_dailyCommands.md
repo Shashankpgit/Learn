@@ -70,7 +70,7 @@ Steps while creating the cluster:
 
 
 cluster creation started at 11:16:50
-hyperdx@finternetlab.io
-Hyperdx@1234
+support@finternetlab.io
+Finternet@1234
 
 anti-Gravity
