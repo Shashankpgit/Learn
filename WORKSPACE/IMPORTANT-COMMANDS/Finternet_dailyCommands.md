@@ -74,3 +74,4 @@ support@finternetlab.io
 Finternet@1234
 
 anti-Gravity
+Use wisperflow to modif the and give cursor the proper context

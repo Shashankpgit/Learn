@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "pro1"
+version = "0.1.0"
+description = ""
+authors = ["Shashank <shashankp9353@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.126.0"
+uvicorn = "^0.38.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
