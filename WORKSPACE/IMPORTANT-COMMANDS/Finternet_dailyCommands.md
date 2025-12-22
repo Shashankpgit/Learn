@@ -13,7 +13,7 @@ GCP:
 7. `gcloud container node-pools describe finternet-dev-pool --cluster=finternet-dev-cluster --zone=asia-southeast1-a`
 8. gcloud container clusters get-credentials finternet-release-dev-cluster \
   --region asia-southeast1-a \
-  --project finternet-sandbox  ` to add the kubeconfig`
+  --project finternet-sandbox  ` to add the kubeconfig`LTNv~XPQQViZ0~
 9. gsutil rm gs://fintenet-foundry-argocd/terraform/state/default.tflock
 10. `gcloud iam workload-identity-pools list  --project=finternet-sandbox  --location=global`
 11. `gcloud iam workload-identity-pools providers list --project=finternet-sandbox --location=global --workload-identity-pool=finternet-sandbox-github-pool`
