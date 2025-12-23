@@ -17,7 +17,7 @@ GCP:
 9. gsutil rm gs://fintenet-foundry-argocd/terraform/state/default.tflock
 10. `gcloud iam workload-identity-pools list  --project=finternet-sandbox  --location=global`
 11. `gcloud iam workload-identity-pools providers list --project=finternet-sandbox --location=global --workload-identity-pool=finternet-sandbox-github-pool`
-12. `./install.sh install --provider gcp --config ./env.conf --install_dependencies install --resource gke`
+12. `./install.sh install --provider gcp --config ./env.conf --install_dependencies true --resource gke`
 
 
 kubectl create namespace argocd
