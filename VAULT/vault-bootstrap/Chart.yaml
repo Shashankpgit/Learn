@@ -1,8 +1,0 @@
-apiVersion: v2
-name: vault-bootstrap
-description: Bootstrap Vault engines, JWT auth, policies, and AppRole for Finternet UNITS
-type: application
-version: 0.1.0
-appVersion: "1.20.4"
-
-
