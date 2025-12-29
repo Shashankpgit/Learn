@@ -20,27 +20,21 @@ GCP:
 12. `./install.sh install --provider gcp --config ./env.conf --install_dependencies true --resource gke`
 
 
+
+
+
+
+
+
+
+
+
+
+# use the below commands to create the argocd namespace and deploy the service
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
-kubectl create secret generic repo-units-automation \
-  --from-file=sshPrivateKey=/home/sankethika/.ssh/id_ed25519 \
-  --from-literal=url=git@github.com:finternet-io/units-automation.git \
-  -n argocd \
-  --type=Opaque
-
-kubectl label secret repo-units-automation \
-  -n argocd argocd.argoproj.io/secret-type=repository
-
-kubectl create secret generic repo-helmcharts \
-  --from-file=sshPrivateKey=/home/sankethika/.ssh/id_ed25519 \
-  --from-literal=url=git@github.com:finternet-io/helmcharts.git \
-  -n argocd \
-  --type=Opaque
-
-kubectl label secret repo-helmcharts \
-  -n argocd argocd.argoproj.io/secret-type=repository
-
+# use the below command to delete the namespaces stuck in terminating state
 for ns in $(kubectl get ns --no-headers | awk '$2=="Terminating" {print $1}'); do
   echo "🧨 Force deleting terminating namespace: $ns"
   kubectl get namespace "$ns" -o json | \
@@ -64,19 +58,14 @@ Steps while creating the cluster:
 3. 
 
 ---------------------------------------------------------
-
-`googleapi: Error 403: Insufficient regional quota to satisfy request: resource "SSD_TOTAL_GB": request requires '60.0' and is short '14.0'. project has a quota of '500.0' with '46.0' available. View and manage quotas at https://console.cloud.google.com/iam-admin/quotas?usage=USED&project=finternet-sandbox.`
-
-
-
-cluster creation started at 11:16:50
+# HyperDX UI user and password
 support@finternetlab.io
 Finternet@1234
 
 anti-Gravity
 Use wisperflow to modif the and give cursor the proper context
 
-
+# Read the below docs changes to reffer for the monitoring or node pole recreate issue
   lifecycle {
     ignore_changes = [
       initial_node_count,
@@ -85,10 +74,24 @@ Use wisperflow to modif the and give cursor the proper context
   }
   
   
-  URL: https://cloud.google.com/kubernetes-engine/docs/how-to/access-scopes
+ URL: https://cloud.google.com/kubernetes-engine/docs/how-to/access-scopes
   
   
+ --------------------------------------------------------------------------------------------------
+  # Finternet API's
   
+  1. decrypt API
+  `curl -k -H "X-Vault-Token: {{use-the-token}}" \
+https://foundry.finternetlab.io/v1/transit/keys/{{use-the-key}}`
+
+eg: `curl -k -H "X-Vault-Token: dev-token" \
+https://foundry.finternetlab.io/v1/transit/keys/units-encryption-master`
+ 
+Note: `use-the-token` use the token which is used to login for the UI same one
+       `use-the-key` use the key name
+
+  
+ 
   
   
   `Terraform used the selected providers to generate the following execution
