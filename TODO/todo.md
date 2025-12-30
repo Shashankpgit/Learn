@@ -3,5 +3,8 @@
 | ID | Topic / Skill | Priority | Status | Description / Notes | Resources / Links |
 |----|---------------|----------|--------|----------------------|-------------------|
 | 1  |   API         | Medium   | ⏳ Todo |                      |                   |
-| 2  |               | Medium   | ⏳ Todo |                      |                   |
-| 3  |               | Low      | ⏳ Todo |                      |                   |
+| 2  |     ClickStack         | Medium   | ⏳ Todo |                      |                   |
+| 3  |   minio            | Low      | ⏳ Todo |                      |                   |
+
+1. AWS is at high priority.
+2. 
