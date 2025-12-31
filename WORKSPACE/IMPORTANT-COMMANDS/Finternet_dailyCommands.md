@@ -57,7 +57,9 @@ Steps while creating the cluster:
 2. Update the env.conf file
 3. 
 
----------------------------------------------------------
+
+`zsh` iterminal
+------------------- --------------------------------------
 # HyperDX UI user and password
 support@finternetlab.io
 Finternet@1234
@@ -90,8 +92,6 @@ https://foundry.finternetlab.io/v1/transit/keys/units-encryption-master`
 Note: `use-the-token` use the token which is used to login for the UI same one
        `use-the-key` use the key name
 
-  
- 
   
   
   `Terraform used the selected providers to generate the following execution

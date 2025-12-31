@@ -1,0 +1,1 @@
+1. look into how to attach the policies to, permissions to the perticular group.
