@@ -182,8 +182,8 @@ body:
     attributes:
       label: Relevant logs or metrics attached?
       options:
-        - Yes
-        - No
+        - "Yes"
+        - "No"
 
   - type: input
     id: screenshots
