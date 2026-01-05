@@ -15,7 +15,7 @@ body:
     attributes:
       value: "### 1. Ticket Summary"
   - type: input
-    id: title
+    id: ticket_title
     attributes:
       label: Ticket Title
       placeholder: Short summary of the issue
