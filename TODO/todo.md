@@ -20,3 +20,5 @@
 12. checkout the new ai called `rocket.new`
 <!-- 13. learn about the `NACL` -->
 14. Learn about the `certificates`
+13. learn how `ssl` and `tls` works and how it works in the cloud.
+14. understand the difference between `sql` and `nosql`
